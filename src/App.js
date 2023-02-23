@@ -1,7 +1,7 @@
 import "./App.css";
 import Navigation from "./components/Navigation";
 import Home from "./pages/home/Home";
-import Login from "./pages/Login";
+import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Chat from "./pages/Chat";
 import { BrowserRouter, Routes, Route} from "react-router-dom";
