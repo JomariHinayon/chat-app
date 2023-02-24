@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Col,
@@ -15,6 +15,16 @@ import { LinkContainer } from "react-router-bootstrap";
 import "./signup.css";
 
 const Signup = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSignup = (e) => {
+    e.preventDefault();
+
+    console.log(username);
+  };
+
   return (
     <Container fluid>
       <Row className="main-container">
@@ -46,7 +56,7 @@ const Signup = () => {
             </Stack>
             <p className="p1">or use you email account for registration</p>
             {/* <i className=" fa-sharp fa-solid fa-envelope fa-lg"></i> */}
-            <Form>
+            <Form onSubmit={handleSignup}>
               <InputGroup className="mb-3" style={{ height: "56px" }}>
                 <InputGroup.Text
                   id="basic-addon1"
@@ -57,7 +67,7 @@ const Signup = () => {
                     width: "50px",
                   }}
                 >
-                  <i class="fa-solid fa-user fa-lg"></i>
+                  <i className="fa-solid fa-user fa-lg"></i>
                 </InputGroup.Text>
                 <Form.Control
                   style={{ backgroundColor: "#f5f5f5", border: "none" }}
@@ -66,6 +76,7 @@ const Signup = () => {
                   aria-describedby="basic-addon1"
                   type="text"
                   required
+                  onChange={(e) => setUsername(e.target.value)}
                 />
               </InputGroup>
               <InputGroup className="mb-3" style={{ height: "56px" }}>
@@ -87,6 +98,7 @@ const Signup = () => {
                   aria-describedby="basic-addon1"
                   type="email"
                   required
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </InputGroup>
 
@@ -109,6 +121,7 @@ const Signup = () => {
                   aria-describedby="basic-addon1"
                   type="password"
                   required
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </InputGroup>
               <Button variant="primary" type="submit" className="sign-in-btn">

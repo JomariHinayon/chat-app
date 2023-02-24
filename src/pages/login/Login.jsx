@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Col,
@@ -15,6 +15,13 @@ import { LinkContainer } from "react-router-bootstrap";
 import "./login.css";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <Container fluid>
       <Row className="main-container">
@@ -32,7 +39,7 @@ const Login = () => {
             </Stack>
             <p className="p1">or use you email account</p>
             {/* <i className=" fa-sharp fa-solid fa-envelope fa-lg"></i> */}
-            <Form>
+            <Form onSubmit={handleLogin}>
               <InputGroup className="mb-3" style={{ height: "56px" }}>
                 <InputGroup.Text
                   id="basic-addon1"
@@ -52,6 +59,7 @@ const Login = () => {
                   aria-describedby="basic-addon1"
                   type="email"
                   required
+                  onChange={e => setEmail(e.target.value)}
                 />
               </InputGroup>
 
@@ -74,6 +82,7 @@ const Login = () => {
                   aria-describedby="basic-addon1"
                   type="password"
                   required
+                  onChange={e => setPassword(e.target.value)}
                 />
               </InputGroup>
               <Button variant="primary" type="submit" className="sign-in-btn">
