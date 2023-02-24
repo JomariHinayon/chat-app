@@ -8,6 +8,7 @@ import {
   Button,
   InputGroup,
 } from "react-bootstrap/esm";
+import { useSignupUserMutation } from "../../services/appApi";
 import mail from "../../assets/mail.png";
 import messages from "../../assets/messages.png";
 import telephone from "../../assets/telephone.png";
@@ -18,11 +19,16 @@ const Signup = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [signupUser, { isLoading, error }] = useSignupUserMutation();
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
 
-    console.log(username);
+    await signupUser({ username, email, password }).then(({ data }) => {
+      if (data) {
+        console.log(data);
+      }
+    });
   };
 
   return (
