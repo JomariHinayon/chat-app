@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Container,
   Col,
@@ -13,13 +13,28 @@ import messages from "../../assets/messages.png";
 import telephone from "../../assets/telephone.png";
 import { LinkContainer } from "react-router-bootstrap";
 import "./login.css";
+import { useLoginUserMutation } from "../../services/appApi";
+import { AppContext } from "../../context/appContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginUser] = useLoginUserMutation();
+  const { socket } = useContext(AppContext);
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+
+    await loginUser({ email, password }).then(({ data }) => {
+      if (data) {
+        console.log(data);
+
+        socket.emit("new-user");
+        navigate("/chat");
+      }
+    });
   };
 
   return (
@@ -59,7 +74,7 @@ const Login = () => {
                   aria-describedby="basic-addon1"
                   type="email"
                   required
-                  onChange={e => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </InputGroup>
 
@@ -82,7 +97,7 @@ const Login = () => {
                   aria-describedby="basic-addon1"
                   type="password"
                   required
-                  onChange={e => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </InputGroup>
               <Button variant="primary" type="submit" className="sign-in-btn">
