@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { Container, ListGroup } from "react-bootstrap";
 import { AppContext } from "../context/appContext";
 import { useSelector } from "react-redux";
+// import axios from 'axios'
 
 const Sidebar = () => {
   const default_rooms = ["first room", "second room", "third room"];
