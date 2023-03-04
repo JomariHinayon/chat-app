@@ -27,7 +27,7 @@ const Message = () => {
   const todayDate = getFormattedDate();
 
   socket.off("room-messages").on("room-messages", (roomMessages) => {
-    console.log(roomMessages)
+    // console.log(roomMessages)
     setMessages(roomMessages)
   })
 
@@ -42,6 +42,7 @@ const Message = () => {
       today.getMinutes() < 10 ? "0" + today.getMinutes : today.getMinutes();
     const time = today.getHours + ":" + minutes;
     const roomId = currentRoom;
+    // console.log(currentRoom)
     socket.emit("message-room", roomId, message, user, time, todayDate);
 
     setMessage("");
