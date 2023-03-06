@@ -8,6 +8,7 @@ export const userSlice = createSlice({
     addNotifications: (state, { payload }) => {
       if (state.newMessages[payload]) {
         state.newMessages[payload] = state.newMessages[payload] + 1;
+        // console.log(state.newMessages[payload])
       } else {
         state.newMessages[payload] = 1;
       }

@@ -1,12 +1,13 @@
 import React, { useContext, useEffect } from "react";
-import { Container, ListGroup } from "react-bootstrap";
+import { Container, ListGroup, Col, Row, Stack } from "react-bootstrap";
 import { AppContext } from "../context/appContext";
 import { useDispatch, useSelector } from "react-redux";
 import { addNotifications, resetNotifactions } from "../features/userSlice";
 // import axios from 'axios'
 
 const Sidebar = () => {
-  const default_rooms = ["first room", "second room", "third room"];
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const {
     socket,
     members,
@@ -19,8 +20,6 @@ const Sidebar = () => {
     currentRoom,
     messages,
   } = useContext(AppContext);
-  const user = useSelector((state) => state.user);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     setCurrentRoom("general");
@@ -30,7 +29,7 @@ const Sidebar = () => {
   }, []);
 
   socket.off("new-user").on("new-user", (payload) => {
-    setMembers([...payload]);
+    setMembers(payload);
   });
 
   function getRooms() {
@@ -41,7 +40,7 @@ const Sidebar = () => {
 
   // room is click
   const joinRoom = async (room, isPublic = true) => {
-    await socket.emit("join-room", room);
+    await socket.emit("join-room", room, currentRoom);
     setCurrentRoom(room);
 
     if (isPublic) {
@@ -52,7 +51,9 @@ const Sidebar = () => {
     dispatch(resetNotifactions(room));
 
     socket.off("notifications").on("notifications", (room) => {
-      dispatch(addNotifications(room));
+      if (currentRoom != room) {
+        dispatch(addNotifications(room));
+      }
     });
   };
 
@@ -71,6 +72,8 @@ const Sidebar = () => {
     joinRoom(roomId, false);
   };
 
+  console.log(user.newMessages);
+
   return (
     <>
       <Container>
@@ -83,11 +86,16 @@ const Sidebar = () => {
               style={{
                 cursor: "pointer",
                 display: "flex",
+                justifyContent: "space-between",
               }}
               active={room == currentRoom}
             >
-              {room} 
-              {/* {room !== currentRoom && <span className="badge rounded-pill bg-primary">{user.newMessages[room]}</span>} */}
+              {room}
+              {room !== currentRoom && (
+                <span className="badge rounded-pill bg-primary">
+                  {user.newMessages[room]}
+                </span>
+              )}
             </ListGroup.Item>
           ))}
         </ListGroup>
@@ -104,7 +112,54 @@ const Sidebar = () => {
               onClick={() => handlePrivateMemberMgs(member)}
               disabled={member._id === user.__id}
             >
-              {member.username}
+              <Stack
+                direction="horizontal"
+                gap={3}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div>
+                  <i
+                    className="fa-solid fa-user fa-lg"
+                    style={{
+                      padding: "20px 12px",
+                      backgroundColor: "#545454",
+                      margin: "0",
+                      borderRadius: "50%",
+                      color: "#e4e4e4",
+                    }}
+                  ></i>
+                  {member.status == "online" ? (
+                    <i
+                      class="fa-solid fa-circle"
+                      style={{
+                        color: "green",
+                        position: "absolute",
+                        bottom: "10px",
+                        left: "45px",
+                      }}
+                    ></i>
+                  ) : (
+                    <i
+                      class="fa-solid fa-circle"
+                      style={{
+                        color: "#e1ad01",
+                        position: "absolute",
+                        bottom: "10px",
+                        left: "45px",
+                      }}
+                    ></i>
+                  )}
+                </div>
+                {member.username}
+                {member._id === user?._id && " (You) "}
+                {member.status == "offline" && " (Offline) "}
+                <span className="badge rounded-pill bg-primary">
+                  {user.newMessages[orderIds(member._id, user._id)]}
+                </span>
+              </Stack>
             </ListGroup.Item>
           ))}
         </ListGroup>

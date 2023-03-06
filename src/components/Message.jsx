@@ -40,9 +40,8 @@ const Message = () => {
     const today = new Date();
     const minutes =
       today.getMinutes() < 10 ? "0" + today.getMinutes : today.getMinutes();
-    const time = today.getHours + ":" + minutes;
+    const time = today.getHours() + ":" + minutes;
     const roomId = currentRoom;
-    // console.log(currentRoom)
     socket.emit("message-room", roomId, message, user, time, todayDate);
 
     setMessage("");

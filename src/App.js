@@ -17,7 +17,7 @@ function App() {
   const [members, setMembers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [privateMemberMsg, setPrivateMemberMsg] = useState({});
-  const [newMessage, setNewMessage] = useState({});
+  const [newMessages, setNewMessages] = useState({});
 
   return (
     <AppContext.Provider
@@ -31,8 +31,8 @@ function App() {
         setMessages,
         privateMemberMsg,
         setPrivateMemberMsg,
-        newMessage,
-        setNewMessage,
+        newMessages,
+        setNewMessages,
         rooms,
         setRooms
       }}
